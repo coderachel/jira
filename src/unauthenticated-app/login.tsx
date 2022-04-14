@@ -1,21 +1,9 @@
-import { stringify } from "querystring";
+import { useAuth } from "context/auth-context";
 import { FormEvent } from "react";
 
-const API_URL = process.env.REACT_APP_API_URL;
-
 export const LoginScreen = () => {
-  const login = (param: { username: string; password: string }): void => {
-    fetch(`${API_URL}/login`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(param),
-      method: "POST",
-    }).then(async (rsp: Response) => {
-      if (rsp.ok) {
-      }
-    });
-  };
+  const { login } = useAuth();
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const username: string = (
