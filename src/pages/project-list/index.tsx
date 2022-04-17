@@ -1,12 +1,13 @@
 import { SearchPanel } from "./search-panel";
 import { List } from "./list";
-import { useState, useEffect } from "react";
-import * as qs from "qs";
-import { cleanObject, useMount, useDebounce } from "utils";
+import { useState } from "react";
+import { useMount, useDebounce } from "utils";
 import { useHttp } from "utils/http";
+import styled from "@emotion/styled";
+import { Typography } from "antd";
+import { useProjects } from "utils/project";
 
 export const ProjectListScreen = () => {
-  const [list, setList] = useState([]);
   const [users, setUsers] = useState([]);
   const [param, setParam] = useState({
     name: "",
@@ -14,25 +15,29 @@ export const ProjectListScreen = () => {
   });
   const debounceParam = useDebounce(param, 1000);
   const client = useHttp();
-
-  useEffect(() => {
-    client("projects", {
-      data: cleanObject(debounceParam),
-    }).then(setList);
-  }, [debounceParam]);
+  const { isLoading, error, data: list } = useProjects(debounceParam);
 
   useMount(() => {
     client("users").then(setUsers);
   });
 
   return (
-    <div>
+    <Container>
+      <h1>项目列表</h1>
       <SearchPanel
         param={param}
         setParam={setParam}
         users={users}
       ></SearchPanel>
-      <List list={list} users={users}></List>
-    </div>
+      {error ? (
+        <Typography.Text type={"danger"}>{error.message}</Typography.Text>
+      ) : null}
+      <List users={users} dataSource={list || []} loading={isLoading}></List>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  padding: 3.2rem;
+  box-sizing: border-box;
+`;

@@ -9,7 +9,6 @@ import right from "assets/image/right.svg";
 
 export default function UnauthenticatedApp() {
   const [isRegister, setIsRegister] = useState(false);
-
   return (
     <Container>
       <Header />
