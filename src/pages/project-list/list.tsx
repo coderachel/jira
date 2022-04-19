@@ -30,7 +30,7 @@ export const List = ({ users, ...props }: ListProps) => {
         },
         {
           title: "部门",
-          dataIndex: "orgnization",
+          dataIndex: "organization",
         },
         {
           title: "负责人",

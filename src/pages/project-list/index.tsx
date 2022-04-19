@@ -6,18 +6,15 @@ import { useHttp } from "utils/http";
 import styled from "@emotion/styled";
 import { Typography } from "antd";
 import { useProjects } from "utils/project";
-import { Test } from "./Test";
+import { useUrlQueryParam } from "utils/url";
 
 export const ProjectListScreen = () => {
   const [users, setUsers] = useState([]);
-  const [param, setParam] = useState({
-    name: "",
-    personId: "",
-  });
+  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
   const debounceParam = useDebounce(param, 1000);
-  const client = useHttp();
   const { isLoading, error, data: list } = useProjects(debounceParam);
 
+  const client = useHttp();
   useDocumentTitle("项目列表", false);
 
   useMount(() => {
